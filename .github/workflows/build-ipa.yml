@@ -18,7 +18,10 @@ concurrency:
 jobs:
   ipa:
     name: Unsigned Kero.ipa
-    runs-on: macos-latest
+    # macos-latest, unless the repository variable IOS_RUNNER names another
+    # runner (as a self-hosted Mac): GitHub's images must carry an Xcode with
+    # the iOS 27.1 SDK for this to build, and the job says so if they don't.
+    runs-on: ${{ vars.IOS_RUNNER || 'macos-latest' }}
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4

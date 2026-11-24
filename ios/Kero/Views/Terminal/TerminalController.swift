@@ -40,6 +40,16 @@ final class TerminalController: NSObject, TerminalViewDelegate {
     @ObservationIgnored private var termSize: (cols: Int, rows: Int)?
     @ObservationIgnored var lastUsed = Date()
     @ObservationIgnored var onFocus: (() -> Void)?
+    @ObservationIgnored private weak var lastConnection: RemoteConnection?
+    @ObservationIgnored private var drops = 0
+    /// This client asked for the pane's size last and claimed it, so the
+    /// pane follows this view's size.
+    @ObservationIgnored private var claimed = false
+    /// The pane is the one the user is at, in a window in front.
+    @ObservationIgnored var isShown = false
+    @ObservationIgnored private var applyingRemote = false
+    /// The size SwiftTerm fits the view's bounds to, as its layout last did.
+    @ObservationIgnored private var viewFit: (cols: Int, rows: Int)?
 
     init(host: UUID, pane: String, fontSize: CGFloat) {
         self.host = host
@@ -102,6 +112,8 @@ final class TerminalController: NSObject, TerminalViewDelegate {
     /// Attaches over a host's connection, starting the terminal over from
     /// what the pane shows.
     func connect(_ conn: RemoteConnection) {
+        if conn !== lastConnection { drops = 0 }
+        lastConnection = conn
         attach?.close()
         phase = .connecting
         let a = AttachClient(connection: conn)
@@ -124,11 +136,13 @@ final class TerminalController: NSObject, TerminalViewDelegate {
         switch e {
         case .welcome(let cols, let rows):
             phase = .live
+            if drops > 0 { drops -= 1 }
             applyTheme()
             // The snapshot that follows is of the pane's size: the terminal
             // takes it, then asks for its own.
             if cols > 0 && rows > 0 { takeRemoteSize(cols, rows) }
-            askSize(force: true)
+            claimed = false
+            if isShown { claim() } else { askSize(force: true) }
         case .output(let data):
             view.feed(byteArray: ArraySlice([UInt8](data)))
         case .resized(let cols, let rows):
@@ -136,6 +150,16 @@ final class TerminalController: NSObject, TerminalViewDelegate {
         case .closed:
             phase = .ended("The pane closed.")
             attach = nil
+        case .dropped:
+            // kerod let go of a client that fell behind: attach again, a few
+            // times in a row at most.
+            attach = nil
+            drops += 1
+            if drops <= 5, let conn = lastConnection {
+                connect(conn)
+            } else {
+                phase = .ended("The host stopped sending this pane.")
+            }
         case .failed(let err):
             phase = .ended((err as? LocalizedError)?.errorDescription ?? err.localizedDescription)
             attach = nil
@@ -143,11 +167,21 @@ final class TerminalController: NSObject, TerminalViewDelegate {
     }
 
     private func takeRemoteSize(_ cols: Int, _ rows: Int) {
+        // A size other than the one this client asked for: another client
+        // has the pane now.
+        if let l = lastAsked, l.cols != cols || l.rows != rows { claimed = false }
         remoteSize = (cols, rows)
         let cur = currentSize()
-        if cur.cols != cols || cur.rows != rows {
-            view.resize(cols: cols, rows: rows)
-        }
+        if cur.cols != cols || cur.rows != rows { applyRemote(cols, rows) }
+    }
+
+    /// Gives SwiftTerm's terminal the pane's size, which kerod's frames are
+    /// of. (SwiftTerm's resize also soft-resets the terminal; the frames that
+    /// follow from kerod set its modes again.)
+    private func applyRemote(_ cols: Int, _ rows: Int) {
+        applyingRemote = true
+        view.resize(cols: cols, rows: rows)
+        applyingRemote = false
     }
 
     /// The size the view holds, in cells.
@@ -159,7 +193,8 @@ final class TerminalController: NSObject, TerminalViewDelegate {
     /// pixels, which programs asking the size in pixels need.
     private func askSize(force: Bool = false) {
         guard let attach else { return }
-        let size = fittedSize()
+        // SwiftTerm's own fit of its bounds, which its layout keeps.
+        let size = viewFit ?? fittedSize()
         guard size.cols > 0, size.rows > 0 else { return }
         if !force, let l = lastAsked, l == size { return }
         lastAsked = size
@@ -181,8 +216,10 @@ final class TerminalController: NSObject, TerminalViewDelegate {
     /// The user is at this terminal: the pane takes this view's size, as it
     /// does once they type.
     func claim() {
+        guard attach != nil else { return }
         askSize(force: true)
         attach?.claim()
+        claimed = true
     }
 
     func clearScreen() { attach?.clearScreen() }
@@ -222,9 +259,19 @@ final class TerminalController: NSObject, TerminalViewDelegate {
 
     func sizeChanged(source: TerminalView, newCols: Int, newRows: Int) {
         termSize = (newCols, newRows)
+        if !applyingRemote { viewFit = (newCols, newRows) }
         // A size kerod sent is no new ask.
         if let r = remoteSize, r.cols == newCols, r.rows == newRows { return }
         askSize()
+        // While another client has the pane, its frames are of the pane's
+        // size: the terminal keeps that size, whatever room the view has,
+        // until this client claims it.
+        if !claimed, let r = remoteSize {
+            DispatchQueue.main.async { [weak self] in
+                guard let self, !self.claimed, let t = self.termSize, t.cols != r.cols || t.rows != r.rows else { return }
+                self.applyRemote(r.cols, r.rows)
+            }
+        }
     }
 
     func setTerminalTitle(source: TerminalView, title: String) { self.title = title }
@@ -281,7 +328,7 @@ final class TerminalCache {
         let c = TerminalController(host: host.id, pane: pane, fontSize: fontSize)
         c.onFocus = { [weak self, weak c] in
             guard let self, let c else { return }
-            self.active = c
+            if self.active !== c { self.active?.isShown = false; self.active = c; c.isShown = true }
             self.model?.terminalFocused(host: c.host, pane: c.pane)
         }
         controllers[k] = c
@@ -291,7 +338,15 @@ final class TerminalCache {
         return c
     }
 
-    func setActive(_ c: TerminalController?) { active = c }
+    /// The terminal the user is at: it has the key bar, and the pane takes
+    /// its size (FrameClaim), as kerod does for the client a user uses.
+    func setActive(_ c: TerminalController?) {
+        guard active !== c else { return }
+        active?.isShown = false
+        active = c
+        c?.isShown = true
+        c?.claim()
+    }
 
     /// A host's link changed: its terminals reattach once it is up, and wait
     /// otherwise.

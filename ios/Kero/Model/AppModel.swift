@@ -71,8 +71,12 @@ final class AppModel {
             } else {
                 let h = HostConnection(config: cfg)
                 h.onNotice = { [weak self] h, n in self?.notice(n, from: h) }
-                h.onLinkChange = { [weak self] h in self?.terminals.linkChanged(h) }
                 h.onState = { [weak self] _ in self?.terminals.prune() }
+                h.onLinkChange = { [weak self] h in
+                    self?.terminals.linkChanged(h)
+                    // A new connection is a new viewer: tell it what is shown.
+                    if h.isConnected, self?.selection?.host == h.id { self?.markViewed() }
+                }
                 next.append(h)
                 if active { h.start() }
             }
@@ -122,7 +126,8 @@ final class AppModel {
                 guard let ss = byProject.removeValue(forKey: p.id), !ss.isEmpty else { continue }
                 out.append(SidebarGroup(host: h, projectID: p.id, name: p.name.isEmpty ? KeroText.dirName(p.dir) : p.name, dir: p.dir, sessions: ss))
             }
-            let rest = byProject.values.flatMap { $0 }
+            let known = Set(h.state.projects.map(\.id))
+            let rest = h.state.sessions.filter { !known.contains($0.project) }
             if !rest.isEmpty {
                 out.append(SidebarGroup(host: h, projectID: "", name: h.name, dir: "", sessions: rest))
             }
@@ -193,7 +198,7 @@ final class AppModel {
     }
 
     var attentionCount: Int {
-        hosts.reduce(0) { $0 + $1.state.sessions.filter { $0.status == .waiting || $0.status == .failed }.count }
+        hosts.reduce(0) { $0 + $1.state.sessions.filter { $0.status == .waiting || $0.unread }.count }
     }
 
     func displayName(_ s: Session) -> String {

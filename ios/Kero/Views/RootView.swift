@@ -6,7 +6,6 @@ import SwiftUI
 /// same terminals either way.
 struct RootView: View {
     @Environment(AppModel.self) private var model
-    @Environment(\.scenePhase) private var scenePhase
     @State private var columns: NavigationSplitViewVisibility = .all
     @State private var compactColumn: NavigationSplitViewColumn = .sidebar
     @State private var renameText = ""
@@ -42,13 +41,6 @@ struct RootView: View {
             if sel != nil { compactColumn = .detail }
         }
         .onChange(of: model.store.hosts) { _, _ in model.syncHosts() }
-        .onChange(of: scenePhase, initial: true) { _, phase in
-            switch phase {
-            case .active: model.activate()
-            case .background: model.deactivate()
-            default: break
-            }
-        }
     }
 }
 
@@ -56,13 +48,14 @@ struct RootView: View {
 /// region covers, and below any cutout at the top: on an iPhone Duo held
 /// open, never across the fold.
 struct ReservedRegionAware<Content: View>: View {
+    var alignment: Alignment = .top
     @ViewBuilder var content: Content
 
     var body: some View {
         GeometryReader { proxy in
             let area = freeArea(proxy)
             content
-                .frame(width: area.width, alignment: .top)
+                .frame(width: area.width, height: area.height, alignment: alignment)
                 .offset(x: area.minX, y: area.minY)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }

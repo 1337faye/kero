@@ -56,6 +56,11 @@ struct SidebarView: View {
                     .keyboardShortcut(",", modifiers: .command)
             }
             ToolbarItem(placement: .primaryAction) {
+                Button { model.jumpToAttention() } label: { Label("Quick Jump", systemImage: "bolt.fill") }
+                    .badge(model.attentionCount)
+            }
+            .visibilityPriority(.high)
+            ToolbarItem(placement: .primaryAction) {
                 Button { model.newSession() } label: { Label("New Session", systemImage: "plus") }
             }
         }

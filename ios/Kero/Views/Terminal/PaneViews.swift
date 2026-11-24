@@ -118,7 +118,8 @@ struct PaneCard: View {
                     // Ghostty's unfocused-split-opacity.
                     Palette.veil.allowsHitTesting(false)
                 }
-                PhaseOverlay(controller: c, host: host)
+                // Clear of the fold and cutouts, where its buttons can't be pressed.
+                ReservedRegionAware(alignment: .center) { PhaseOverlay(controller: c, host: host) }
             }
             .background(Palette.card)
             .onChange(of: focused, initial: true) { _, f in

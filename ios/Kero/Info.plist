@@ -9,8 +9,6 @@
 		     as the desktop app does (HostAddress.verifyTailnet). -->
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
 	</dict>
 	<key>UIAppFonts</key>
 	<array>
@@ -22,7 +20,7 @@
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
-		<true/>
+		<false/>
 	</dict>
 </dict>
 </plist>

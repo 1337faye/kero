@@ -28,10 +28,15 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Show toolchain
+      - name: Check for the iOS 27.1 SDK
         run: |
           xcodebuild -version
           xcodebuild -showsdks | grep -i ios
+          sdk="$(xcrun --sdk iphoneos --show-sdk-version)"
+          if [ "$(printf '%s\n27.1\n' "$sdk" | sort -V | head -1)" != "27.1" ]; then
+            echo "::error::Kero for iOS needs the iOS 27.1 SDK or later; this runner's Xcode has $sdk"
+            exit 1
+          fi
 
       - name: Install XcodeGen
         run: brew install xcodegen

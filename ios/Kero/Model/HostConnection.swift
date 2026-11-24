@@ -36,7 +36,6 @@ final class HostConnection: Identifiable {
     @ObservationIgnored private var backoff: TimeInterval = 1
     @ObservationIgnored private var wanted = false
     @ObservationIgnored private var generation = 0
-    @ObservationIgnored private let decoder = JSONDecoder()
 
     /// Called on a notification a program on the host posted.
     @ObservationIgnored var onNotice: ((HostConnection, Notice) -> Void)?
@@ -76,7 +75,11 @@ final class HostConnection: Identifiable {
 
     func start() {
         wanted = true
-        if connection == nil && connectTask == nil { connect() }
+        // A retry that is waiting goes now: the app just came back.
+        if connection == nil && connectTask == nil {
+            retryTask?.cancel(); retryTask = nil
+            connect()
+        }
     }
 
     /// Drops the link, as the app goes to the background: iOS would cut it
@@ -92,71 +95,70 @@ final class HostConnection: Identifiable {
 
     func reconnect() {
         wanted = true
-        retryTask?.cancel(); retryTask = nil
-        connectTask?.cancel(); connectTask = nil
-        generation += 1
         teardown()
         backoff = 1
         connect()
     }
 
     private func teardown() {
-        control?.onClose = nil
-        control?.onEvent = nil
+        // Closing ends their callbacks too, on their own queue.
         control?.close()
         control = nil
-        connection?.onClose = nil
         connection?.close()
         connection = nil
     }
 
     private func connect() {
+        // One connection at a time: anything still under way is fenced off
+        // by the generation.
+        retryTask?.cancel(); retryTask = nil
+        connectTask?.cancel()
+        generation += 1
         link = .connecting
         onLinkChange?(self)
         let gen = generation
         let config = config
         connectTask = Task { [weak self] in
+            var conn: RemoteConnection?
             do {
                 let addr = try HostAddress.parse(config.address)
-                let conn = try await RemoteConnection.connect(to: addr, clientName: Self.clientName, appVersion: Self.appVersion)
-                let ctl = ControlClient(connection: conn)
+                let c = try await RemoteConnection.connect(to: addr, clientName: Self.clientName, appVersion: Self.appVersion)
+                conn = c
+                c.setOnClose { [weak self] err in
+                    Task { @MainActor in self?.down(err ?? RemoteError.closed, gen: gen) }
+                }
+                let ctl = ControlClient(connection: c)
+                ctl.setHandlers(onEvent: Self.eventHandler(self, gen: gen), onClose: { [weak self] err in
+                    Task { @MainActor in self?.down(err ?? RemoteError.closed, gen: gen) }
+                })
                 _ = try await ctl.start(clientName: Self.clientName)
-                guard let self, gen == self.generation, !Task.isCancelled else { conn.close(); return }
-                self.up(conn, ctl, gen: gen)
+                guard let self, gen == self.generation, !Task.isCancelled else { c.close(); return }
+                self.up(c, ctl)
                 try await ctl.call("subscribe")
-            } catch is CancellationError {
             } catch {
-                guard let self, gen == self.generation else { return }
+                guard let self, gen == self.generation, !(error is CancellationError) else { conn?.close(); return }
+                conn?.close()
                 self.down(error, gen: gen)
             }
         }
     }
 
-    private func up(_ conn: RemoteConnection, _ ctl: ControlClient, gen: Int) {
-        connectTask = nil
-        connection = conn
-        control = ctl
-        info = conn.welcome?.host ?? HostInfo()
-        backoff = 1
-        conn.onClose = { [weak self] err in
-            Task { @MainActor in self?.down(err ?? RemoteError.closed, gen: gen) }
-        }
-        ctl.onClose = { [weak self] err in
-            Task { @MainActor in self?.down(err ?? RemoteError.closed, gen: gen) }
-        }
-        let decoder = self.decoder
-        ctl.onEvent = { [weak self] event, line in
-            // Decoded on the connection's queue: a state can be large.
+    /// What a control connection's events do, on its queue: a state can be
+    /// large, so it is decoded there.
+    private nonisolated static func eventHandler(_ host: HostConnection?, gen: Int) -> (String, Data) -> Void {
+        weak let weakHost = host
+        let decoder = JSONDecoder()
+        return { event, line in
             switch event {
             case "state":
                 struct M: Decodable { var state: DaemonState? }
                 guard let st = (try? decoder.decode(M.self, from: line))?.state else { return }
-                Task { @MainActor in self?.took(st, gen: gen) }
+                Task { @MainActor in weakHost?.took(st, gen: gen) }
             case "notice":
                 struct M: Decodable { var notice: Notice? }
                 guard let n = (try? decoder.decode(M.self, from: line))?.notice else { return }
                 Task { @MainActor in
-                    guard let self, gen == self.generation else { return }
+                    guard let self = weakHost, gen == self.generation else { return }
                     self.onNotice?(self, n)
                 }
             default:
@@ -166,6 +168,14 @@ final class HostConnection: Identifiable {
                 break
             }
         }
+    }
+
+    private func up(_ conn: RemoteConnection, _ ctl: ControlClient) {
+        connectTask = nil
+        connection = conn
+        control = ctl
+        info = conn.welcome?.host ?? HostInfo()
+        backoff = 1
         link = .connected
         onLinkChange?(self)
         Task { [weak self] in

@@ -64,12 +64,11 @@ struct HostAddress: Hashable, Sendable, CustomStringConvertible {
 
     /// The WebSocket URL of kerod's mux.
     var muxURL: URL {
-        var c = URLComponents()
-        c.scheme = scheme == .https ? "wss" : "ws"
-        c.host = host
-        c.port = effectivePort
-        c.path = KeroProtocol.muxPath
-        return c.url!
+        // An IPv6 literal goes in brackets, which URLComponents.host won't
+        // add itself (it yields no URL for a bare one).
+        let h = host.contains(":") ? "[\(host)]" : host
+        return URL(string: "\(scheme == .https ? "wss" : "ws")://\(h):\(effectivePort)\(KeroProtocol.muxPath)")
+            ?? URL(string: "ws://invalid.invalid\(KeroProtocol.muxPath)")!
     }
 
     /// remote.Addr.Label: the host's first label, the name a new host takes.

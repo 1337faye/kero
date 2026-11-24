@@ -120,6 +120,9 @@ private struct KeyCap: View {
     var action: () -> Void
 
     @State private var timer: Timer?
+    /// Held, for the arrows' repeat: a gesture state goes back to false
+    /// however the touch ends, cancelled ones too.
+    @GestureState private var held = false
 
     var body: some View {
         Button {
@@ -141,21 +144,31 @@ private struct KeyCap: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
-        .simultaneousGesture(repeats ? DragGesture(minimumDistance: 0)
-            .onChanged { _ in
-                guard timer == nil else { return }
-                action()
-                let t = Timer(timeInterval: 0.45, repeats: false) { _ in
-                    MainActor.assumeIsolated {
-                        let r = Timer(timeInterval: 0.08, repeats: true) { _ in MainActor.assumeIsolated { action() } }
-                        RunLoop.main.add(r, forMode: .common)
-                        timer = r
-                    }
-                }
-                RunLoop.main.add(t, forMode: .common)
-                timer = t
-            }
-            .onEnded { _ in timer?.invalidate(); timer = nil } : nil)
+        .simultaneousGesture(repeats ? DragGesture(minimumDistance: 0).updating($held) { _, state, _ in state = true } : nil)
+        .onChange(of: held) { _, isHeld in
+            if isHeld { startRepeat() } else { stopRepeat() }
+        }
+        .onDisappear { stopRepeat() }
         .accessibilityAction { action() }
+    }
+
+    private func startRepeat() {
+        stopRepeat()
+        action()
+        let first = Timer(timeInterval: 0.45, repeats: false) { _ in
+            MainActor.assumeIsolated {
+                guard held else { return }
+                let r = Timer(timeInterval: 0.08, repeats: true) { _ in MainActor.assumeIsolated { action() } }
+                RunLoop.main.add(r, forMode: .common)
+                timer = r
+            }
+        }
+        RunLoop.main.add(first, forMode: .common)
+        timer = first
+    }
+
+    private func stopRepeat() {
+        timer?.invalidate()
+        timer = nil
     }
 }

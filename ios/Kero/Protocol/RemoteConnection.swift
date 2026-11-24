@@ -185,7 +185,7 @@ final class RemoteConnection: @unchecked Sendable {
 
     private func start(clientName: String, appVersion: String) async throws -> MuxWelcome {
         try await withCheckedThrowingContinuation { (cont: CheckedContinuation<MuxWelcome, Error>) in
-            queue.async {
+            queue.async { [self] in
                 self.handshake = cont
                 self.transport.onData = { [weak self] d in self?.received(d) }
                 self.transport.onClose = { [weak self] err in self?.transportClosed(err) }
@@ -283,6 +283,11 @@ final class RemoteConnection: @unchecked Sendable {
         h?(err)
     }
 
+    /// Sets onClose on the connection's queue, where it is read.
+    func setOnClose(_ h: ((Error?) -> Void)?) {
+        queue.async { if !self.ended { self.onClose = h } }
+    }
+
     /// Opens a stream to kerod and writes its Hello. Call on the queue.
     func openStream(_ hello: Hello) throws -> YamuxStream {
         dispatchPrecondition(condition: .onQueue(queue))
@@ -307,6 +312,7 @@ final class RemoteConnection: @unchecked Sendable {
     /// Ends the connection and every stream of it.
     func close() {
         queue.async {
+            self.onClose = nil
             if let mux = self.mux { mux.close(nil) } else { self.failHandshake(RemoteError.closed); self.transport.close() }
         }
     }
@@ -340,10 +346,20 @@ final class ControlClient: @unchecked Sendable {
 
     init(connection: RemoteConnection) { conn = connection }
 
+    /// Sets the handlers on the connection's queue, where they are read:
+    /// before start, so nothing the stream brings goes unheard.
+    func setHandlers(onEvent: ((String, Data) -> Void)?, onClose: ((Error?) -> Void)?) {
+        conn.queue.async {
+            guard !self.closed else { return }
+            self.onEvent = onEvent
+            self.onClose = onClose
+        }
+    }
+
     /// Opens the stream and reads kerod's Welcome.
     func start(clientName: String) async throws -> Welcome {
         try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Welcome, Error>) in
-            conn.queue.async {
+            conn.queue.async { [self] in
                 do {
                     let s = try self.conn.openStream(Hello(kind: "control", client: clientName))
                     self.stream = s
@@ -439,8 +455,13 @@ final class ControlClient: @unchecked Sendable {
         try await call(method, Optional<None>.none)
     }
 
+    /// Ends the connection from this side: its handlers hear nothing more.
     func close() {
-        conn.queue.async { self.ended(nil) }
+        conn.queue.async {
+            self.onClose = nil
+            self.onEvent = nil
+            self.ended(nil)
+        }
     }
 
     private func ended(_ err: Error?) {
@@ -481,7 +502,11 @@ final class AttachClient: @unchecked Sendable {
         case welcome(cols: Int, rows: Int)
         case output(Data)
         case resized(cols: Int, rows: Int)
+        /// The pane is gone (FrameClosed).
         case closed
+        /// kerod ended the stream with the pane still there, as it does to
+        /// a client too slow to keep up: attach again, from a first frame.
+        case dropped
         case failed(Error)
     }
 
@@ -497,13 +522,13 @@ final class AttachClient: @unchecked Sendable {
     init(connection: RemoteConnection) { conn = connection }
 
     func start(pane: String, cols: Int, rows: Int, clientName: String) {
-        conn.queue.async {
+        conn.queue.async { [self] in
             do {
                 let hello = Hello(kind: "attach", session: pane, cols: cols > 0 ? cols : nil, rows: rows > 0 ? rows : nil, client: clientName)
                 let s = try self.conn.openStream(hello)
                 self.stream = s
                 s.onData = { [weak self] d in self?.received(d) }
-                s.onClose = { [weak self] err in self?.finish(err.map { Event.failed($0) } ?? .closed) }
+                s.onClose = { [weak self] err in self?.finish(err.map { Event.failed($0) } ?? .dropped) }
             } catch {
                 self.finish(.failed(error))
             }

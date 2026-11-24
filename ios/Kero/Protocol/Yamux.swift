@@ -341,6 +341,14 @@ final class YamuxStream: @unchecked Sendable {
     fileprivate func remoteFinished() {
         remoteFinishedFlag = true
         end(nil)
+        // The host is done writing: this side answers with its own FIN, as
+        // yamux's Close does in that state, and the stream is gone.
+        if !localFinished, let session {
+            localFinished = true
+            pending.removeAll()
+            session.sendFrame(.windowUpdate, flags: .fin, stream: id, length: 0)
+            session.forget(id)
+        }
     }
 
     fileprivate func remoteReset() {

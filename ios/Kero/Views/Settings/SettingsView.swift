@@ -53,6 +53,7 @@ struct HostsSettingsView: View {
     @Environment(AppModel.self) private var model
     @State private var editing: HostConfig?
     @State private var adding = false
+    @State private var removing: HostConfig?
 
     var body: some View {
         List {
@@ -60,13 +61,13 @@ struct HostsSettingsView: View {
                 ForEach(model.store.hosts) { cfg in
                     Button { editing = cfg } label: { HostSettingsRow(config: cfg) }
                         .buttonStyle(.plain)
-                        .swipeActions {
-                            Button(role: .destructive) { model.store.remove(cfg.id) } label: { Label("Remove", systemImage: "trash") }
+                        .swipeActions(allowsFullSwipe: false) {
+                            Button(role: .destructive) { removing = cfg } label: { Label("Remove", systemImage: "trash") }
                         }
                         .contextMenu {
                             Button { editing = cfg } label: { Label("Edit…", systemImage: "pencil") }
                             Button { model.host(cfg.id)?.reconnect() } label: { Label("Reconnect", systemImage: "arrow.triangle.2.circlepath") }
-                            Button(role: .destructive) { model.store.remove(cfg.id) } label: { Label("Remove", systemImage: "trash") }
+                            Button(role: .destructive) { removing = cfg } label: { Label("Remove", systemImage: "trash") }
                         }
                 }
                 .onMove { model.store.move(from: $0, to: $1) }
@@ -91,6 +92,11 @@ struct HostsSettingsView: View {
                 Button { adding = true } label: { Label("Add Host", systemImage: "plus") }
             }
             ToolbarItem(placement: .secondaryAction) { EditButton() }
+        }
+        .confirmationDialog("Remove \(removing?.name ?? "")?", isPresented: Binding(get: { removing != nil }, set: { if !$0 { removing = nil } }), titleVisibility: .visible, presenting: removing) { cfg in
+            Button("Remove", role: .destructive) { model.store.remove(cfg.id) }
+        } message: { _ in
+            Text("Its sessions keep running on the host.")
         }
         .sheet(isPresented: $adding) {
             HostEditorView(original: nil)
@@ -258,16 +264,18 @@ struct HostEditorView: View {
         test = .running
         let addressText = address
         Task {
+            var opened: RemoteConnection?
+            defer { opened?.close() }
             do {
                 let addr = try HostAddress.parse(addressText)
                 let start = Date()
                 let conn = try await RemoteConnection.connect(to: addr, clientName: HostConnection.clientName, appVersion: HostConnection.appVersion)
+                opened = conn
                 let ctl = ControlClient(connection: conn)
                 let w = try await ctl.start(clientName: HostConnection.clientName)
                 let ms = Int(Date().timeIntervalSince(start) * 1000)
                 let i = conn.welcome?.host ?? HostInfo()
                 ctl.close()
-                conn.close()
                 var s = "Connected in \(ms) ms: Kero \(w.app.isEmpty ? i.kero : w.app) on \(i.hostname.isEmpty ? addr.host : i.hostname)"
                 if !i.os.isEmpty { s += " (\(i.os)/\(i.arch))" }
                 if !i.peer.isEmpty { s += " as \(i.peer)" }

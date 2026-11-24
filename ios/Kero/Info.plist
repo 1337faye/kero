@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- kerod's tailnet listener speaks plain HTTP (WireGuard encrypts it). The app
+		     itself refuses http:// to anything but a Tailscale or loopback address,
+		     as the desktop app does (HostAddress.verifyTailnet). -->
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>JetBrainsMonoNerdFont-Regular.ttf</string>
+		<string>JetBrainsMonoNerdFont-Bold.ttf</string>
+		<string>JetBrainsMonoNerdFont-Italic.ttf</string>
+		<string>JetBrainsMonoNerdFont-BoldItalic.ttf</string>
+	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

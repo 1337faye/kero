@@ -1,0 +1,516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08030EA9D192B673F65A183D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EBEDE250AFBB5F518FDA837 /* Assets.xcassets */; };
+		11B8BA54DC4DDC73BEB01F08 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8624F392EF19B75CD10677E9 /* OFL.txt */; };
+		1E4F32F776E1654D35686DEE /* JetBrainsMonoNerdFont-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3EC25997A2083B0BF572446A /* JetBrainsMonoNerdFont-BoldItalic.ttf */; };
+		20CA63A495EB2824DC30FC91 /* JetBrainsMonoNerdFont-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 73FF3D34E4D0C432DE115B90 /* JetBrainsMonoNerdFont-Regular.ttf */; };
+		24C1BFF90B22D603BA194A4E /* PaneViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22999A09B1825E682F3E965 /* PaneViews.swift */; };
+		298A4B2E6255D052F4227FD0 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 300E5C64FC4D691F561D16A4 /* AppModel.swift */; };
+		37BE5E0C0BC9BBEED1B79346 /* JetBrainsMonoNerdFont-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA5515CE8C3478E64870C21D /* JetBrainsMonoNerdFont-Bold.ttf */; };
+		3DAE976B8F1CEA1FC3515501 /* WorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D62812775FCD876B53E03ED /* WorkspaceView.swift */; };
+		442E62EC20E5722810BE6A70 /* StatusIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493366069F141F206374AA62 /* StatusIcon.swift */; };
+		82B349BA1473795FC4ADA04D /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82F894F9B1E79D6339DF16A /* Palette.swift */; };
+		99A2E0A201F80BAD60A55577 /* KeyAccessoryBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A10DB2FDCE83684168D46 /* KeyAccessoryBar.swift */; };
+		A9403C4432C3E0A5AFB3B786 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB51B40BB3287ECE2AE66F /* Models.swift */; };
+		B63FCC9C590F94408D9EE09D /* KeroApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DDEA5E049805F4A915FDA8 /* KeroApp.swift */; };
+		B85250EE5A9F8322525C023B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C2D2FE8A8F14ABFEC14F38 /* SettingsView.swift */; };
+		B95C5EA1671C63333E145840 /* HostConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97DC6B966E979A30F363B7E /* HostConnection.swift */; };
+		BBDD15E948CE15E041C15743 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5CA1D435532A1603E08E21 /* SidebarView.swift */; };
+		C7AE2F9F5562F11C3962440A /* RemoteConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C78BBA37D1E5EDC47025F5 /* RemoteConnection.swift */; };
+		C8E7253C8FB4CF60661B6469 /* Yamux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FFA970DA860AEA0E2963760 /* Yamux.swift */; };
+		D74C91917213DD9725E7B842 /* TerminalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49547A046D4837F30870FBBD /* TerminalController.swift */; };
+		D9B86685EA78C402BA40EB1E /* HostAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FDA736D672625F4EF675ED /* HostAddress.swift */; };
+		E300AE5842576A516E36437C /* JetBrainsMonoNerdFont-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C4981A58AF1255629D2645C1 /* JetBrainsMonoNerdFont-Italic.ttf */; };
+		EB6F5CDC6E5616F44D537207 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 3045EDC8CC164EB1180F6E27 /* SwiftTerm */; };
+		EBAA81B22D903A9F4831D722 /* HostStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FCD9B1595B8B64FCB11AE7 /* HostStore.swift */; };
+		EF824C0C60AE379884F691B0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B64C67E65DB77016A49CED /* RootView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11FDA736D672625F4EF675ED /* HostAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostAddress.swift; sourceTree = "<group>"; };
+		16DB51B40BB3287ECE2AE66F /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		1D62812775FCD876B53E03ED /* WorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceView.swift; sourceTree = "<group>"; };
+		2D5CA1D435532A1603E08E21 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		300E5C64FC4D691F561D16A4 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		3155A333D048E23EC1C55031 /* Kero.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Kero.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33C78BBA37D1E5EDC47025F5 /* RemoteConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConnection.swift; sourceTree = "<group>"; };
+		3EC25997A2083B0BF572446A /* JetBrainsMonoNerdFont-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMonoNerdFont-BoldItalic.ttf"; sourceTree = "<group>"; };
+		3FFA970DA860AEA0E2963760 /* Yamux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Yamux.swift; sourceTree = "<group>"; };
+		493366069F141F206374AA62 /* StatusIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIcon.swift; sourceTree = "<group>"; };
+		49547A046D4837F30870FBBD /* TerminalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalController.swift; sourceTree = "<group>"; };
+		53895CED3F56BE8E5EB3727F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5EBEDE250AFBB5F518FDA837 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		693A10DB2FDCE83684168D46 /* KeyAccessoryBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyAccessoryBar.swift; sourceTree = "<group>"; };
+		73FF3D34E4D0C432DE115B90 /* JetBrainsMonoNerdFont-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMonoNerdFont-Regular.ttf"; sourceTree = "<group>"; };
+		83B64C67E65DB77016A49CED /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		8624F392EF19B75CD10677E9 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		88C2D2FE8A8F14ABFEC14F38 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A97DC6B966E979A30F363B7E /* HostConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostConnection.swift; sourceTree = "<group>"; };
+		C22999A09B1825E682F3E965 /* PaneViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaneViews.swift; sourceTree = "<group>"; };
+		C4981A58AF1255629D2645C1 /* JetBrainsMonoNerdFont-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMonoNerdFont-Italic.ttf"; sourceTree = "<group>"; };
+		D4DDEA5E049805F4A915FDA8 /* KeroApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeroApp.swift; sourceTree = "<group>"; };
+		D8FCD9B1595B8B64FCB11AE7 /* HostStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostStore.swift; sourceTree = "<group>"; };
+		DA5515CE8C3478E64870C21D /* JetBrainsMonoNerdFont-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMonoNerdFont-Bold.ttf"; sourceTree = "<group>"; };
+		F82F894F9B1E79D6339DF16A /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		18007BB9E308CAA465445E8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB6F5CDC6E5616F44D537207 /* SwiftTerm in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A0F54108166C2A26CE17971 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D4DDEA5E049805F4A915FDA8 /* KeroApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		208701C8511B6269EFA74541 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				300E5C64FC4D691F561D16A4 /* AppModel.swift */,
+				A97DC6B966E979A30F363B7E /* HostConnection.swift */,
+				D8FCD9B1595B8B64FCB11AE7 /* HostStore.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		21E958F54F4692CDD8FB7DF9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DA5515CE8C3478E64870C21D /* JetBrainsMonoNerdFont-Bold.ttf */,
+				3EC25997A2083B0BF572446A /* JetBrainsMonoNerdFont-BoldItalic.ttf */,
+				C4981A58AF1255629D2645C1 /* JetBrainsMonoNerdFont-Italic.ttf */,
+				73FF3D34E4D0C432DE115B90 /* JetBrainsMonoNerdFont-Regular.ttf */,
+				8624F392EF19B75CD10677E9 /* OFL.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		29B453B5E10F2C2691FBAD25 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83B64C67E65DB77016A49CED /* RootView.swift */,
+				2D5CA1D435532A1603E08E21 /* SidebarView.swift */,
+				493366069F141F206374AA62 /* StatusIcon.swift */,
+				1D62812775FCD876B53E03ED /* WorkspaceView.swift */,
+				63AFE13BDAE54615513518DE /* Settings */,
+				3BD215FF2081CB7126532DAA /* Terminal */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2A72909C43A3A161BE4D282B /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				F82F894F9B1E79D6339DF16A /* Palette.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		3BD215FF2081CB7126532DAA /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				693A10DB2FDCE83684168D46 /* KeyAccessoryBar.swift */,
+				C22999A09B1825E682F3E965 /* PaneViews.swift */,
+				49547A046D4837F30870FBBD /* TerminalController.swift */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
+		63AFE13BDAE54615513518DE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				88C2D2FE8A8F14ABFEC14F38 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		66EA77DDFE12F3BAD434379A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3155A333D048E23EC1C55031 /* Kero.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		70A72141FF429C7AEFF55F89 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				11FDA736D672625F4EF675ED /* HostAddress.swift */,
+				16DB51B40BB3287ECE2AE66F /* Models.swift */,
+				33C78BBA37D1E5EDC47025F5 /* RemoteConnection.swift */,
+				3FFA970DA860AEA0E2963760 /* Yamux.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		E32CF8566801348E59C2E100 /* Kero */ = {
+			isa = PBXGroup;
+			children = (
+				5EBEDE250AFBB5F518FDA837 /* Assets.xcassets */,
+				53895CED3F56BE8E5EB3727F /* Info.plist */,
+				0A0F54108166C2A26CE17971 /* App */,
+				21E958F54F4692CDD8FB7DF9 /* Fonts */,
+				208701C8511B6269EFA74541 /* Model */,
+				70A72141FF429C7AEFF55F89 /* Protocol */,
+				2A72909C43A3A161BE4D282B /* Theme */,
+				29B453B5E10F2C2691FBAD25 /* Views */,
+			);
+			path = Kero;
+			sourceTree = "<group>";
+		};
+		FD021DEAE916D4513B9CD371 = {
+			isa = PBXGroup;
+			children = (
+				E32CF8566801348E59C2E100 /* Kero */,
+				66EA77DDFE12F3BAD434379A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		018F0A5934F587779ECF1C37 /* Kero */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E595F7AF04CECDE8E4B1871 /* Build configuration list for PBXNativeTarget "Kero" */;
+			buildPhases = (
+				8577E63ED5707B384F8AEC12 /* Sources */,
+				B244F6FAA49D80B900AD5B9B /* Resources */,
+				18007BB9E308CAA465445E8B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Kero;
+			packageProductDependencies = (
+				3045EDC8CC164EB1180F6E27 /* SwiftTerm */,
+			);
+			productName = Kero;
+			productReference = 3155A333D048E23EC1C55031 /* Kero.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CC35694464E3237460F961F5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					018F0A5934F587779ECF1C37 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DA95780FF55406681F387962 /* Build configuration list for PBXProject "Kero" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = FD021DEAE916D4513B9CD371;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				75412F084D87D1292D69440B /* XCRemoteSwiftPackageReference "SwiftTerm" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 66EA77DDFE12F3BAD434379A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				018F0A5934F587779ECF1C37 /* Kero */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B244F6FAA49D80B900AD5B9B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08030EA9D192B673F65A183D /* Assets.xcassets in Resources */,
+				37BE5E0C0BC9BBEED1B79346 /* JetBrainsMonoNerdFont-Bold.ttf in Resources */,
+				1E4F32F776E1654D35686DEE /* JetBrainsMonoNerdFont-BoldItalic.ttf in Resources */,
+				E300AE5842576A516E36437C /* JetBrainsMonoNerdFont-Italic.ttf in Resources */,
+				20CA63A495EB2824DC30FC91 /* JetBrainsMonoNerdFont-Regular.ttf in Resources */,
+				11B8BA54DC4DDC73BEB01F08 /* OFL.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8577E63ED5707B384F8AEC12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				298A4B2E6255D052F4227FD0 /* AppModel.swift in Sources */,
+				D9B86685EA78C402BA40EB1E /* HostAddress.swift in Sources */,
+				B95C5EA1671C63333E145840 /* HostConnection.swift in Sources */,
+				EBAA81B22D903A9F4831D722 /* HostStore.swift in Sources */,
+				B63FCC9C590F94408D9EE09D /* KeroApp.swift in Sources */,
+				99A2E0A201F80BAD60A55577 /* KeyAccessoryBar.swift in Sources */,
+				A9403C4432C3E0A5AFB3B786 /* Models.swift in Sources */,
+				82B349BA1473795FC4ADA04D /* Palette.swift in Sources */,
+				24C1BFF90B22D603BA194A4E /* PaneViews.swift in Sources */,
+				C7AE2F9F5562F11C3962440A /* RemoteConnection.swift in Sources */,
+				EF824C0C60AE379884F691B0 /* RootView.swift in Sources */,
+				B85250EE5A9F8322525C023B /* SettingsView.swift in Sources */,
+				BBDD15E948CE15E041C15743 /* SidebarView.swift in Sources */,
+				442E62EC20E5722810BE6A70 /* StatusIcon.swift in Sources */,
+				D74C91917213DD9725E7B842 /* TerminalController.swift in Sources */,
+				3DAE976B8F1CEA1FC3515501 /* WorkspaceView.swift in Sources */,
+				C8E7253C8FB4CF60661B6469 /* Yamux.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		289A26A425F6613A94F91D59 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kero/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kero;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Kero connects to kerod on the machines you add in Settings › Hosts.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.kero.Kero;
+				PRODUCT_NAME = Kero;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5DD9683692F67428E803252A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		8594D126B27351A9645AEDA7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Kero/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Kero;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Kero connects to kerod on the machines you add in Settings › Hosts.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.kero.Kero;
+				PRODUCT_NAME = Kero;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F276D94F113C615940FCE873 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1E595F7AF04CECDE8E4B1871 /* Build configuration list for PBXNativeTarget "Kero" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8594D126B27351A9645AEDA7 /* Debug */,
+				289A26A425F6613A94F91D59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DA95780FF55406681F387962 /* Build configuration list for PBXProject "Kero" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F276D94F113C615940FCE873 /* Debug */,
+				5DD9683692F67428E803252A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		75412F084D87D1292D69440B /* XCRemoteSwiftPackageReference "SwiftTerm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/migueldeicaza/SwiftTerm.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.99.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3045EDC8CC164EB1180F6E27 /* SwiftTerm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75412F084D87D1292D69440B /* XCRemoteSwiftPackageReference "SwiftTerm" */;
+			productName = SwiftTerm;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = CC35694464E3237460F961F5 /* Project object */;
+}

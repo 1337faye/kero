@@ -1,0 +1,53 @@
+name: Build iOS IPA
+
+on:
+  push:
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/build-ipa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ipa:
+    name: Unsigned Kero.ipa
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      # The app targets the iOS 27.1 SDK: take the newest Xcode the runner has.
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i ios
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Cache Swift packages
+        uses: actions/cache@v4
+        with:
+          path: ios/build/DerivedData/SourcePackages
+          key: spm-${{ runner.os }}-${{ hashFiles('ios/project.yml') }}
+
+      - name: Build unsigned IPA
+        run: ios/build-ipa.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Kero-unsigned-ipa
+          path: ios/build/Kero-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 30

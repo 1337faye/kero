@@ -23,10 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The app targets the iOS 27.1 SDK: take the newest Xcode the runner has.
+      - name: List the runner's Xcodes
+        run: ls -d /Applications/Xcode*.app
+
+      # The app targets the iOS 27.1 SDK: take the newest Xcode the runner
+      # has, a beta too while no release has it.
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: latest
 
       - name: Check for the iOS 27.1 SDK
         run: |
